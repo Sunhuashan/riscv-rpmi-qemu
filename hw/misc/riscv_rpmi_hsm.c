@@ -187,6 +187,7 @@ int handle_rpmi_grp_hsm(struct rpmi_message *msg, int xport_id)
         break;
 
     case RPMI_HSM_SRV_GET_HART_LIST:
+       {
         uint64_t harts_mask =  rpmi_get_harts_mask(xport_id);
         uint32_t hart_id, skip_count = req_data[0];
         int i, returned = 0, remaining = 0;
@@ -222,6 +223,7 @@ int handle_rpmi_grp_hsm(struct rpmi_message *msg, int xport_id)
         resp_data.hart_list.remaining = remaining;
         resp_data.hart_list.returned = returned;
         resp_dlen = sizeof(resp_data.hart_list);
+       }
         break;
 
     case RPMI_HSM_SRV_GET_SUSPEND_INFO:

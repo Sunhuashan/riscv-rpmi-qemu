@@ -143,6 +143,7 @@ int handle_rpmi_grp_suspend(struct rpmi_message *msg, int xport_id)
 
         switch (suspend_type) {
         case RPMI_SYSSUSP_SHUTDOWN:
+	{
             CPUState *cpu = cpu_by_arch_id(srv_data->hart_id);
             CPURISCVState *env = cpu ? cpu->env_ptr : NULL;
 
@@ -159,6 +160,7 @@ int handle_rpmi_grp_suspend(struct rpmi_message *msg, int xport_id)
 
             resp_data.susp.status = 0;
             resp_dlen = sizeof(resp_data.susp);
+	   }
             break;
 
         default:

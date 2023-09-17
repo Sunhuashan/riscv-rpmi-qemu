@@ -155,12 +155,14 @@ int handle_rpmi_grp_clock(struct rpmi_message *msg, int xport_id) {
 
     /* Enable Notifications */
     case RPMI_CLK_SRV_ENABLE_NOTIFICATION:
+	    {
         u32 event_id = 0;
         event_id = le32toh(req_data[0]);
         clk_subs[event_id].state =  RPMI_CLK_ENABLED;
         clk_subs[event_id].subscribers_cnt++;
         resp_data.notify_enable.status = RPMI_SUCCESS;
         resp_datalen = sizeof(resp_data.notify_enable);
+	    }
         break;
 
     /* Get Number of System Clocks */
@@ -192,6 +194,7 @@ int handle_rpmi_grp_clock(struct rpmi_message *msg, int xport_id) {
 
     /* Get Clock Supported Rates */
     case RPMI_CLK_SRV_GET_SUPPORTED_RATES:
+	{
         size_t i = 0, j = 0;
         u32 remaining = 0, returned = 0;
 
@@ -253,10 +256,12 @@ int handle_rpmi_grp_clock(struct rpmi_message *msg, int xport_id) {
         resp_datalen = resp_data.get_supp_rates.returned *
                           sizeof(struct rpmi_clk_rate) +
                           (4 * sizeof(u32));
+	}
         break;
 
     /* Set Clock Config */
     case RPMI_CLK_SRV_SET_CONFIG:
+	{
         enum rpmi_clk_state clk_state;
 
         clk_id = le32toh(req_data[0]);
@@ -290,6 +295,7 @@ int handle_rpmi_grp_clock(struct rpmi_message *msg, int xport_id) {
         rpmi_clk[clk_id].state = clk_state;
         resp_data.set_config.status = RPMI_SUCCESS;
         resp_datalen = sizeof(resp_data.set_config);
+	}
         break;
 
     /* Get Clock Config */
@@ -310,6 +316,7 @@ int handle_rpmi_grp_clock(struct rpmi_message *msg, int xport_id) {
 
     /* Set Clock Rate */
     case RPMI_CLK_SRV_SET_RATE:
+	{
         size_t idx = 0;
         u64 rate, min, max, step, temp;
         enum rpmi_clk_rate_match rate_match;
@@ -395,6 +402,7 @@ int handle_rpmi_grp_clock(struct rpmi_message *msg, int xport_id) {
         rpmi_clk[clk_id].current_rate = rate;
         resp_data.set_rate.status = RPMI_SUCCESS;
         resp_datalen = sizeof(resp_data.set_rate);
+	}
         break;
 
     /* Get Clock Rate */
